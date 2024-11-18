@@ -1,4 +1,5 @@
 import pygame
+import sys
 
 TILE_SIZE = 64
 WIDTH = TILE_SIZE * 8

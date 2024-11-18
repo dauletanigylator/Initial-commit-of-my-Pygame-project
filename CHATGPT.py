@@ -79,7 +79,8 @@ def move_enemy():
 
     if player.colliderect(enemy):
         print("You died!")
-        pygame.stop()
+        pygame.quit()
+        sys.exit()
 
 while True:
     for event in pygame.event.get():
