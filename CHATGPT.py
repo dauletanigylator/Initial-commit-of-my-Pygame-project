@@ -13,7 +13,7 @@ tiles = {
     'goal': (0, 255, 0),       # Green
     'door': (255, 0, 0),       # Red
     'key': (0, 0, 255)         # Blue
-}
+}   
 unlock = 0
 
 maze = [
@@ -88,13 +88,13 @@ while True:
             pygame.quit()
             sys.exit()
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_UP:
+            if event.key == pygame.K_UP or event.key == pygame.K_w:  # UP / W
                 move_player(0, -1)
-            if event.key == pygame.K_DOWN:
+            if event.key == pygame.K_DOWN or event.key == pygame.K_s:  # DOWN / S
                 move_player(0, 1)
-            if event.key == pygame.K_LEFT:
+            if event.key == pygame.K_LEFT or event.key == pygame.K_a:  # LEFT / A
                 move_player(-1, 0)
-            if event.key == pygame.K_RIGHT:
+            if event.key == pygame.K_RIGHT or event.key == pygame.K_d:  # RIGHT / D
                 move_player(1, 0)
 
     move_enemy()
