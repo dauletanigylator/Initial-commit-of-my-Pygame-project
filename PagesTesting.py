@@ -1,5 +1,4 @@
 
-
 import pygame
 import sys
 
@@ -8,7 +7,7 @@ pygame.init()
 TILE_SIZE = 80
 FONT_SIZE = 32
 
-# Define colors for tiles
+# Defining colors for tiles
 tiles = {
     'empty': (255, 255, 255),  # White
     'wall': (0, 0, 0),         # Black
@@ -19,7 +18,7 @@ tiles = {
     'power_up': (255, 0, 255)  # Magenta
 }
 
-# Define levels
+# Defining levels
 levels = [
     # Level 1
     [
@@ -46,27 +45,20 @@ levels = [
     ]
 ]
 
+# Descriptions for levels
 level_descriptions = [
     "Level 1: A simple maze to get started. Collect the key and coins to reach the goal.",
     "Level 2: A more challenging layout with multiple doors and a moving enemy."
 ]
+
 # Game variables
 current_level = 0
 maze = levels[current_level]
 unlock = 0
 score = 0
-game_state = "play"  # States: "play", "game_over", "victory", "menu"
-
-# Dynamic screen size
-def update_screen_size():
-    global WIDTH, HEIGHT
-    WIDTH = TILE_SIZE * len(maze[0])
-    HEIGHT = TILE_SIZE * len(maze)
-    pygame.display.set_mode((WIDTH, HEIGHT))
-
-update_screen_size()
-
-# Initialize Pygame
+game_state = "menu"  # States: "menu", "play", "game_over", "victory"
+WIDTH = TILE_SIZE * len(maze[0])
+HEIGHT = TILE_SIZE * len(maze)
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Maze Game")
 clock = pygame.time.Clock()
@@ -77,6 +69,13 @@ player = pygame.Rect(TILE_SIZE, TILE_SIZE, TILE_SIZE, TILE_SIZE)
 enemy = pygame.Rect(3 * TILE_SIZE, 6 * TILE_SIZE, TILE_SIZE, TILE_SIZE)
 enemy_dir = -1
 
+def update_screen_size():
+    global WIDTH, HEIGHT
+    WIDTH = TILE_SIZE * len(maze[0])
+    HEIGHT = TILE_SIZE * len(maze)
+    pygame.display.set_mode((WIDTH, HEIGHT))
+
+update_screen_size()
 
 def draw():
     screen.fill((0, 0, 0))
@@ -96,7 +95,6 @@ def draw():
     screen.blit(level_text, (10, 50))
 
     pygame.display.flip()
-
 
 def move_player(dx, dy):
     global unlock, score, game_state
@@ -124,7 +122,6 @@ def move_player(dx, dy):
                 unlock -= 1
                 maze[new_row][new_col] = 0
 
-
 def move_enemy():
     global enemy_dir, game_state
     row, col = int(enemy.y // TILE_SIZE), int(enemy.x // TILE_SIZE)
@@ -135,10 +132,8 @@ def move_enemy():
     else:
         enemy_dir *= -1
 
-
     if player.colliderect(enemy):
         game_state = "game_over"
-
 
 def reset_level():
     global maze, unlock, score, player, enemy, enemy_dir, game_state
@@ -150,7 +145,6 @@ def reset_level():
     enemy_dir = -1
     game_state = "play"
 
-
 def next_level():
     global current_level, maze, game_state
     current_level += 1
@@ -161,20 +155,55 @@ def next_level():
     else:
         game_state = "menu"
 
+def show_menu():
+    screen.fill((0, 0, 0))
+    title_text = font.render("Main Menu", True, (255, 255, 255))
+    screen.blit(title_text, (WIDTH // 2 - title_text.get_width() // 2, HEIGHT // 2 - 100))
+
+    buttons = [
+        ("Start Game", start_game),
+        ("Levels", show_levels_page),
+        ("Quit", quit_game)
+    ]
+
+    draw_buttons(buttons)
+
+def draw_buttons(buttons):
+    buttons_rects = []
+    for i, (label, action) in enumerate(buttons):
+        button = pygame.Rect(WIDTH // 2 - 100, HEIGHT // 2 + i * 60, 200, 50)
+        pygame.draw.rect(screen, (255, 0, 0), button)
+        button_text = font.render(label, True, (255, 255, 255))
+        screen.blit(button_text, (button.x + 50, button.y + 10))
+        buttons_rects.append((button, action))
+
+    pygame.display.flip()
+
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                for button, action in buttons_rects:
+                    if button.collidepoint(event.pos):
+                        action()
+                        return
+
 def show_levels_page():
     while True:
         screen.fill((0, 0, 0))
         
-        # Draw "Back to Menu" button
-        back_button = pygame.Rect(50, HEIGHT - 80, 200, 50)
+        #  "Back to Menu" button
+        back_button = pygame.Rect(50, HEIGHT - 50, 200, 50)
         pygame.draw.rect(screen, (255, 0, 0), back_button)
         back_text = font.render("Back to Menu", True, (255, 255, 255))
         screen.blit(back_text, (back_button.x + 20, back_button.y + 10))
         
-        # Draw subpages for levels
+        #  Subpages for levels
         for i, description in enumerate(level_descriptions):
             level_button = pygame.Rect(50, 50 + i * 60, 200, 50)
-            pygame.draw.rect(screen, (0, 255, 0), level_button)
+            pygame.draw.rect(screen, (255, 255, 255), level_button)
             level_text = font.render(f"Level {i + 1}", True, (0, 0, 0))
             screen.blit(level_text, (level_button.x + 50, level_button.y + 10))
 
@@ -199,8 +228,30 @@ def show_levels_page():
                 pygame.quit()
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN and back_button.collidepoint(event.pos):
+                global game_state
+                game_state = "menu"  # Redirecttion to the main menu
                 return
+            
+def start_game():
+    global game_state
+    reset_level()
+    game_state = "play"
 
+def start_level_1():
+    global current_level
+    current_level = 0
+    reset_level()
+    game_state = "play"
+
+def start_level_2():
+    global current_level
+    current_level = 1
+    reset_level()
+    game_state = "play"
+
+def quit_game():
+    pygame.quit()
+    sys.exit()
 
 def show_message(message, options):
     screen.fill((0, 0, 0))
@@ -227,14 +278,11 @@ def show_message(message, options):
                         action()
                         return
 
-def start_game():
-    global game_state
-    reset_level()
-    game_state = "play"
-
 # Game loop
 while True:
-    if game_state == "play":
+    if game_state == "menu":
+        show_menu()
+    elif game_state == "play":
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -253,9 +301,6 @@ while True:
         draw()
         clock.tick(10)
     elif game_state == "game_over":
-        show_message("You Died!", [("Restart", reset_level), ("Quit", sys.exit)])
+        show_message("You Died!", [("Restart", reset_level), ("Quit", quit_game), ("Menu", show_menu)])
     elif game_state == "victory":
-        show_message("Level Completed!", [("Next Level", next_level), ("Main Menu", reset_level)])
-    elif game_state == "menu":
-        show_message("Main Menu", [("Play", start_game), ("Quit", sys.exit)])
-
+        show_message("Level Completed!", [("Next Level", next_level), ("Main Menu", show_menu)])
