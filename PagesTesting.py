@@ -1,6 +1,8 @@
 
 import pygame
 import sys
+import random 
+
 
 pygame.init()
 
@@ -63,6 +65,9 @@ screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Maze Game")
 clock = pygame.time.Clock()
 font = pygame.font.SysFont(None, FONT_SIZE)
+enemy_speed_interval = 400  # Time in milliseconds between enemy moves
+last_enemy_move_time = pygame.time.get_ticks()
+
 
 # Initialize player and enemy positions
 player = pygame.Rect(TILE_SIZE, TILE_SIZE, TILE_SIZE, TILE_SIZE)
@@ -122,28 +127,85 @@ def move_player(dx, dy):
                 unlock -= 1
                 maze[new_row][new_col] = 0
 
+
 def move_enemy():
-    global enemy_dir, game_state
+    """Move the enemy at a controlled speed."""
+    global game_state, last_enemy_move_time
+
+    # Check if enough time has passed
+    current_time = pygame.time.get_ticks()
+    if current_time - last_enemy_move_time < enemy_speed_interval:
+        return
+
+    # Update the last move time
+    last_enemy_move_time = current_time
+
+    # Choose a random direction to move
+    directions = [
+        (0, -1),  # Left
+        (0, 1),   # Right
+        (-1, 0),  # Up
+        (1, 0)    # Down
+    ]
+    random.shuffle(directions)
+
     row, col = int(enemy.y // TILE_SIZE), int(enemy.x // TILE_SIZE)
-    new_row = row + enemy_dir
+    for dx, dy in directions:
+        new_row, new_col = row + dy, col + dx
+        if (
+            0 <= new_row < len(maze) and
+            0 <= new_col < len(maze[0]) and
+            list(tiles.keys())[maze[new_row][new_col]] != 'wall'
+        ):
+            enemy.x = new_col * TILE_SIZE
+            enemy.y = new_row * TILE_SIZE
+            break
 
-    if 0 <= new_row < len(maze) and list(tiles.keys())[maze[new_row][col]] != 'wall':
-        enemy.y = new_row * TILE_SIZE
-    else:
-        enemy_dir *= -1
-
+    # Check if the enemy collides with the player
     if player.colliderect(enemy):
         game_state = "game_over"
+'''
+
+def move_enemy():
+    global game_state
+    directions = [
+        (0, -1),  # Left
+        (0, 1),   # Right
+        (-1, 0),  # Up
+        (1, 0)    # Down
+    ]
+    random.shuffle(directions)  # Randomize movement order
+    # Add enemy speed multiplier (0.5 = half speed, 2 = double speed)
+    ENEMY_SPEED = 0.5  # Adjust this value to change enemy speed
+    
+    row, col = int(enemy.y // TILE_SIZE), int(enemy.x // TILE_SIZE)
+    
+    for dx, dy in directions:
+        new_row, new_col = row + dy, col + dx
+        if (
+            0 <= new_row < len(maze) and 
+            0 <= new_col < len(maze[0]) and 
+            list(tiles.keys())[maze[new_row][new_col]] != 'wall'
+        ):
+            # Apply speed multiplier to enemy movement
+            enemy.x += dx * TILE_SIZE * ENEMY_SPEED
+            enemy.y += dy * TILE_SIZE * ENEMY_SPEED
+            break
+    # Check if enemy collides with the player
+    if player.colliderect(enemy):
+        game_state = "game_over"
+'''
 
 def reset_level():
     global maze, unlock, score, player, enemy, enemy_dir, game_state
-    maze = levels[current_level]
+    maze = [row[:] for row in levels[current_level]]  # Reload the level from levels
     unlock = 0
     score = 0
     player.topleft = (TILE_SIZE, TILE_SIZE)
     enemy.topleft = (3 * TILE_SIZE, 6 * TILE_SIZE)
     enemy_dir = -1
     game_state = "play"
+
 
 def next_level():
     global current_level, maze, game_state
@@ -195,7 +257,7 @@ def show_levels_page():
         screen.fill((0, 0, 0))
         
         #  "Back to Menu" button
-        back_button = pygame.Rect(50, HEIGHT - 50, 200, 50)
+        back_button = pygame.Rect(50, HEIGHT - 100, 200, 50)
         pygame.draw.rect(screen, (255, 0, 0), back_button)
         back_text = font.render("Back to Menu", True, (255, 255, 255))
         screen.blit(back_text, (back_button.x + 20, back_button.y + 10))
@@ -299,7 +361,7 @@ while True:
 
         move_enemy()
         draw()
-        clock.tick(10)
+        clock.tick(120)
     elif game_state == "game_over":
         show_message("You Died!", [("Restart", reset_level), ("Quit", quit_game), ("Menu", show_menu)])
     elif game_state == "victory":
