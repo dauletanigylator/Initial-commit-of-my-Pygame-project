@@ -44,26 +44,27 @@ levels = [
         [1, 0, 1, 1, 0, 1, 1, 1, 0, 1],
         [1, 0, 0, 4, 0, 0, 0, 0, 5, 1],
         [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
-    ]
+    ],
+    #LEVEL3
+    [
+        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 0, 0, 0, 0, 1, 5, 0, 3, 1, 0, 0, 2, 0, 3, 1],
+        [1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1],
+        [1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1],
+        [1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1],
+        [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1],
+        [1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1],
+        [1, 0, 0, 4, 0, 0, 0, 0, 5, 1, 0, 0, 0, 0, 5, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    ] 
 ]
-''' #LEVEL3
-   [
-        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-        [1, 0, 0, 0, 0, 1, 5, 0, 3, 1, 1, 0, 0, 0, 0, 1, 2, 0, 3, 1],
-        [1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 0, 1],
-        [1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1],
-        [1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1],
-        [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1],
-        [1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 0, 1],
-        [1, 0, 0, 4, 0, 0, 0, 0, 5, 1, 1, 0, 0, 4, 0, 0, 0, 0, 5, 1],
-        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
-    ],'''
 
 
 # Descriptions for levels
 level_descriptions = [
     "Level 1: A simple maze to get started. Collect the key and coins to reach the goal.",
-    "Level 2: A more challenging layout with multiple doors and a moving enemy."
+    "Level 2: A more challenging layout with multiple doors and a moving enemy.",
+    "Level 3: New challenging layout with multiple doors and a moving enemy."
 ]
 
 # Game variables
@@ -113,8 +114,8 @@ def draw():
             pygame.draw.rect(screen, color, (x, y, TILE_SIZE, TILE_SIZE))
 
     # PLAYER & ENEMY IMAGE
-    player_image = pygame.image.load("player.gif")
-    enemy_image = pygame.image.load("enemy.gif")
+    player_image = pygame.image.load("jerry.png")
+    enemy_image = pygame.image.load("tom.png")
 
     # Scale images to match TILE_SIZE
     player_image = pygame.transform.scale(player_image, (TILE_SIZE, TILE_SIZE))
@@ -291,7 +292,7 @@ def show_levels_page():
     level_images = []
     for i in range(len(level_descriptions)):
         try:
-            level_image = pygame.image.load(f'level{i+1}_image.png') 
+            level_image = pygame.image.load(f'level{i+1}_image.png') #UPLOADING ALL IMAGIES FOR LEVELS
             # Resize the image to make it smaller (e.g., 100px wide)
             level_image = pygame.transform.scale(level_image, (350, 350))  # SIZE OF THE IMAGES
             level_images.append(level_image)
@@ -382,6 +383,12 @@ def start_level_1():
 def start_level_2():
     global current_level
     current_level = 1
+    reset_level()
+    game_state = "play"
+
+def start_level_3():
+    global current_level
+    current_level = 2
     reset_level()
     game_state = "play"
 
