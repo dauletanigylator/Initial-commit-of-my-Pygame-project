@@ -1,8 +1,8 @@
 
+import cv2
 import pygame
 import sys
 import random
-
 
 pygame.init()
 
@@ -80,7 +80,7 @@ DEFAULT_HEIGHT = TILE_SIZE * len(levels[1])
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Maze Game")
 clock = pygame.time.Clock()
-font = pygame.font.SysFont(None, FONT_SIZE)
+font = pygame.font.Font("Jersey10-Regular.ttf", FONT_SIZE)
 enemy_speed_interval = 400  # ENEMY MOVEMENT SPEED
 last_enemy_move_time = pygame.time.get_ticks()
 
@@ -249,29 +249,59 @@ def next_level():
         game_state = "menu"
 
 def show_menu():
-    update_screen_size(default=True)  # Reset to default dimensions
-    screen.fill((0, 0, 0))
-    title_text = font.render("Main Menu", True, (255, 255, 255))
-    screen.blit(title_text, (WIDTH // 2 - title_text.get_width() // 2, HEIGHT // 2 - 100))
+    update_screen_size(default=True)
+    
+    
+    #FONTS & SIZE OF THE TEXT
+    title_font = pygame.font.Font("Jersey10-Regular.ttf", 96)  
+    subtitle_font = pygame.font.Font("Jersey10-Regular.ttf", 48)
+    subtitle1_font = pygame.font.Font("Graduate-Regular.ttf", 24)
 
+    #RENDERTEXT
+    main_title_text = title_font.render("Maze Game", True, (255, 255, 255))
+    subtitle_text = subtitle_font.render("Main Menu", True, (255, 255, 255))
+    subtitle1_text = subtitle1_font.render("DEVELOPED BY GROUP 3", True, (255, 255, 255))
+    
+    #POSITION OF THE TEXT
+    main_title_y = 180 
+    subtitle_y = 280
+    subtitle1_y = 650
+
+    # DISPLAYTEXT
+    screen.blit(main_title_text, (WIDTH // 2 - main_title_text.get_width() // 2, main_title_y))
+    screen.blit(subtitle_text, (WIDTH // 2 - subtitle_text.get_width() // 2, subtitle_y))
+    screen.blit(subtitle1_text, (WIDTH // 2 - subtitle1_text.get_width() // 2, subtitle1_y))
+
+    #BUTTONS
     buttons = [
         ("Start Game", start_game),
         ("Levels", show_levels_page),
         ("Quit", quit_game)
     ]
-
+    
+    # Draw buttons
     draw_buttons(buttons)
     pygame.display.flip()
-
 
 def draw_buttons(buttons):
     buttons_rects = []
     for i, (label, action) in enumerate(buttons):
-        button = pygame.Rect(WIDTH // 2 - 100, HEIGHT // 2 + i * 60, 200, 50)
-        pygame.draw.rect(screen, (255, 0, 0), button)
+        # BUTTONSIZES
+        button_width, button_height = 200, 50
+        button_x = WIDTH // 2 - button_width // 2
+        button_y = HEIGHT // 2 + i * 60  # SPACING BETWEEN BUTTONS
+
+        # ROUNDBUTTON
+        button_rect = pygame.Rect(button_x, button_y, button_width, button_height)
+        pygame.draw.rect(screen, (255, 0, 0), button_rect, border_radius=10) #RADIUS OF THE BUTTON
+
+        #ALIGNMENT
         button_text = font.render(label, True, (255, 255, 255))
-        screen.blit(button_text, (button.x + 50, button.y + 10))
-        buttons_rects.append((button, action))
+        text_x = button_rect.centerx - button_text.get_width() // 2
+        text_y = button_rect.centery - button_text.get_height() // 2
+        screen.blit(button_text, (text_x, text_y))
+
+        buttons_rects.append((button_rect, action))
 
     pygame.display.flip()
 
@@ -288,72 +318,75 @@ def draw_buttons(buttons):
 
 def show_levels_page():
     update_screen_size(default=True)
-    # Load images with error checking
     level_images = []
+
+    # Load level images
     for i in range(len(level_descriptions)):
         try:
-            level_image = pygame.image.load(f'level{i+1}_image.png') #UPLOADING ALL IMAGIES FOR LEVELS
-            # Resize the image to make it smaller (e.g., 100px wide)
-            level_image = pygame.transform.scale(level_image, (350, 350))  # SIZE OF THE IMAGES
+            level_image = pygame.image.load(f'level{i+1}_image.png')  # Load image for level
+            level_image = pygame.transform.scale(level_image, (350, 350))  # Resize image
             level_images.append(level_image)
         except pygame.error as e:
             print(f"Error loading image for Level {i+1}: {e}")
-            level_images.append(None)  # IF FAILS TEXT NONE
+            level_images.append(None)  # Placeholder for missing image
 
     while True:
         screen.fill((0, 0, 0))
-        
-        # "Back to Menu" button
-        back_button = pygame.Rect(50, HEIGHT - 100, 200, 50)
-        pygame.draw.rect(screen, (255, 0, 0), back_button)
+
+        # BACKTOMENU BUTTON
+        back_button_rect = pygame.Rect(50, HEIGHT - 100, 200, 50)
+        pygame.draw.rect(screen, (255, 0, 0), back_button_rect, border_radius=20)
         back_text = font.render("Back to Menu", True, (255, 255, 255))
-        screen.blit(back_text, (back_button.x + 25, back_button.y + 15))
-        
-        # Subpages for levels
+        back_text_x = back_button_rect.centerx - back_text.get_width() // 2
+        back_text_y = back_button_rect.centery - back_text.get_height() // 2
+        screen.blit(back_text, (back_text_x, back_text_y))
+
+        # ALIGNMENTS
+        level_buttons = []
         for i, description in enumerate(level_descriptions):
-            level_button = pygame.Rect(50, 50 + i * 60, 200, 50)
-            pygame.draw.rect(screen, (255, 255, 255), level_button)
+            button_x = 50
+            button_y = 50 + i * 60
+            button_width, button_height = 200, 50
+
+            level_button_rect = pygame.Rect(button_x, button_y, button_width, button_height)
+            pygame.draw.rect(screen, (255, 255, 255), level_button_rect, border_radius=10)
+
             level_text = font.render(f"Level {i + 1}", True, (0, 0, 0))
-            screen.blit(level_text, (level_button.x + 50, level_button.y + 10))
+            text_x = level_button_rect.centerx - level_text.get_width() // 2
+            text_y = level_button_rect.centery - level_text.get_height() // 2
+            screen.blit(level_text, (text_x, text_y))
 
-            if pygame.mouse.get_pressed()[0] and level_button.collidepoint(pygame.mouse.get_pos()):
-                global current_level
-                current_level = i
-                reset_level()
-                return
+            level_buttons.append((level_button_rect, i))
 
-        # Display description and image for hovered level
+        # DESCRIPTION
         mouse_pos = pygame.mouse.get_pos()
-        for i, description in enumerate(level_descriptions):
-            level_button = pygame.Rect(50, 50 + i * 60, 200, 50)
-            if level_button.collidepoint(mouse_pos):
-                # Calculate dynamic font size
-                dynamic_font_size = max(30, min(40, WIDTH // 40))
-                dynamic_font = pygame.font.Font(None, dynamic_font_size)
-                
-                # Split text into multiple lines if too wide
+        for level_button_rect, i in level_buttons:
+            if level_button_rect.collidepoint(mouse_pos):
+                # DYNAMICTEXT
+                dynamic_font_size = max(20, min(30, WIDTH // 40))
+                dynamic_font = pygame.font.Font("Jersey10-Regular.ttf", dynamic_font_size)
+
+                # SPLITTING TO PARTS (, TEXT>)
                 wrapped_text = []
-                words = description.split(' ')
+                words = level_descriptions[i].split(' ')
                 line = ""
                 for word in words:
                     test_line = f"{line} {word}".strip()
-                    if dynamic_font.size(test_line)[0] > WIDTH - 300:  # Adjust based on available space
+                    if dynamic_font.size(test_line)[0] > WIDTH - 300:  #POS Of text
                         wrapped_text.append(line)
                         line = word
                     else:
                         line = test_line
-                wrapped_text.append(line)  # Add the final line
-                
-                # Render and display wrapped text
+                wrapped_text.append(line) 
+
                 for j, line in enumerate(wrapped_text):
                     description_text = dynamic_font.render(line, True, (255, 255, 255))
                     screen.blit(description_text, (300, 100 + j * (dynamic_font_size + 5)))
 
-                # Display the image above the description, fitted to the right side
+                # IMAGE
                 if level_images[i]:
-                    image = level_images[i]  # Get the corresponding image for the level
-                    # Position the image on the right side of the screen
-                    image_rect = image.get_rect(topright=(WIDTH - 100, 200))  # 50px padding from the right side
+                    image = level_images[i]
+                    image_rect = image.get_rect(topright=(WIDTH - 100, 200))
                     screen.blit(image, image_rect)
 
         pygame.display.flip()
@@ -362,17 +395,26 @@ def show_levels_page():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
-            if event.type == pygame.MOUSEBUTTONDOWN and back_button.collidepoint(event.pos):
-                global game_state
-                game_state = "menu"  # Redirect to the main menu
-                return
-            
+
+            # BUTTONHAPTIC
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if back_button_rect.collidepoint(event.pos):
+                    global game_state
+                    game_state = "menu"
+                    return
+
+                for level_button_rect, i in level_buttons:
+                    if level_button_rect.collidepoint(event.pos):
+                        global current_level
+                        current_level = i
+                        reset_level()
+                        return
+       
 def start_game():
     global game_state
     update_screen_size()
     reset_level()
     game_state = "play"
-
 
 def start_level_1():
     global current_level
@@ -398,15 +440,33 @@ def quit_game():
 
 def show_message(message, options):
     screen.fill((0, 0, 0))
-    text = font.render(message, True, (255, 255, 255))
-    screen.blit(text, (WIDTH // 2 - text.get_width() // 2, HEIGHT // 2 - 50))
+    
+    #MESSAGESSIZES
+    title_font = pygame.font.Font("Jersey10-Regular.ttf", 48)  #SIZE YOU DIED
+    text = title_font.render(message, True, (255, 255, 255))
+    text_x = WIDTH // 2 - text.get_width() // 2
+    text_y = HEIGHT // 2 - 50
+    screen.blit(text, (text_x, text_y))
+    
     buttons = []
+    
+    #BUTTONSIZES
     for i, (label, action) in enumerate(options):
-        button = pygame.Rect(WIDTH // 2 - 100, HEIGHT // 2 + i * 60, 200, 50)
-        pygame.draw.rect(screen, (255, 0, 0), button)
+        button_width, button_height = 200, 50
+        button_x = WIDTH // 2 - button_width // 2
+        button_y = HEIGHT // 2 + 60 + i * 60 
+
+        # ROUNDBUTTON
+        button_rect = pygame.Rect(button_x, button_y, button_width, button_height)
+        pygame.draw.rect(screen, (255, 0, 0), button_rect, border_radius=10)
+
+        #ALIGNMENT
         button_text = font.render(label, True, (255, 255, 255))
-        screen.blit(button_text, (button.x + 50, button.y + 10))
-        buttons.append((button, action))
+        text_x = button_rect.centerx - button_text.get_width() // 2
+        text_y = button_rect.centery - button_text.get_height() // 2
+        screen.blit(button_text, (text_x, text_y))
+        
+        buttons.append((button_rect, action))
 
     pygame.display.flip()
 
@@ -415,10 +475,12 @@ def show_message(message, options):
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
+
+            # Check if a button is clicked
             if event.type == pygame.MOUSEBUTTONDOWN:
-                for button, action in buttons:
-                    if button.collidepoint(event.pos):
-                        action()
+                for button_rect, action in buttons:
+                    if button_rect.collidepoint(event.pos):
+                        action()  # Call the corresponding action
                         return
 
 #GAMELOOP
