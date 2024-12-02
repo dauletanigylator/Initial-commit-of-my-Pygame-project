@@ -63,7 +63,7 @@ level_descriptions = [
     "Level 3: New challenging layout with multiple doors and a moving enemy."
 ]
 
-# GAME VARIABLE 
+# Game variables
 current_level = 0
 maze = levels[current_level]
 unlock = 0
@@ -173,7 +173,7 @@ def move_enemy():
     # Update the last move time
     last_enemy_move_time = current_time
 
-    # Choose a random direction to move
+    # random direction to move
     directions = [
         (0, -1),  # Left
         (0, 1),   # Right
@@ -194,14 +194,13 @@ def move_enemy():
             enemy.y = new_row * TILE_SIZE
             break
 
-    # Check if the enemy collides with the player
     if player.colliderect(enemy):
         game_state = "game_over"
 
 
 def reset_level():
     global maze, unlock, score, player, enemy, enemy_dir, game_state
-    maze = [row[:] for row in levels[current_level]]  # Reload the level from levels
+    maze = [row[:] for row in levels[current_level]]  # Reload from start
     unlock = 0
     score = 0
     player.topleft = (TILE_SIZE, TILE_SIZE)
@@ -290,11 +289,11 @@ def show_levels_page():
     update_screen_size(default=True)
     level_images = []
 
-    #LEVELIMAGES
+    # LEVEL IMAGES
     for i in range(len(level_descriptions)):
         try:
-            level_image = pygame.image.load(f'level{i+1}_image.png')  # AUTOUPDATE PF PHOTO
-            level_image = pygame.transform.scale(level_image, (350, 350))  # Resize image
+            level_image = pygame.image.load(f'level{i+1}_image.png')  # Load image for level
+            level_image = pygame.transform.scale(level_image, (350, 350))  # RESIZING IMG
             level_images.append(level_image)
         except pygame.error as e:
             print(f"Error loading image for Level {i+1}: {e}")
@@ -446,11 +445,11 @@ def show_message(message, options):
                 pygame.quit()
                 sys.exit()
 
-            # BUTTON CLICKS THEN DO THIS
+            # Check if a button is clicked
             if event.type == pygame.MOUSEBUTTONDOWN:
                 for button_rect, action in buttons:
                     if button_rect.collidepoint(event.pos):
-                        action()  # Calling the corresponding action
+                        action()  # Call the corresponding action
                         return
 
 #GAMELOOP
@@ -475,30 +474,6 @@ while True:
         move_enemy()
         draw()
         clock.tick(120)
-    elif game_state == "game_over":
-        show_message("You Died!", [("Restart", reset_level), ("Quit", quit_game), ("Menu", show_menu)])
-    elif game_state == "victory":
-        show_message("Level Completed!", [("Next Level", next_level), ("Main Menu", show_menu)])
-    if game_state == "menu":
-        show_menu()
-    elif game_state == "play":
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_UP or event.key == pygame.K_w:  # UP / W
-                    move_player(0, -1)
-                if event.key == pygame.K_DOWN or event.key == pygame.K_s:  # DOWN / S
-                    move_player(0, 1)
-                if event.key == pygame.K_LEFT or event.key == pygame.K_a:  # LEFT / A
-                    move_player(-1, 0)
-                if event.key == pygame.K_RIGHT or event.key == pygame.K_d:  # RIGHT / D
-                    move_player(1, 0)
-
-        move_enemy()
-        draw()
-        clock.tick(120) #FPS
     elif game_state == "game_over":
         show_message("You Died!", [("Restart", reset_level), ("Quit", quit_game), ("Menu", show_menu)])
     elif game_state == "victory":
