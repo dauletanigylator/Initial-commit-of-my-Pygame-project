@@ -18,18 +18,23 @@ tiles = {
     'coin': pygame.image.load("coin.png"),
     'power_up': (255, 0, 255)  # Magenta
 }
-
+'''
+5 - coin
+4 - KEY
+3 - door
+2 - goal
+'''
 # LEVELS & DESCRIP
 levels = [
-    #LEVEL2
+    #LEVEL1
     [
         [1, 1, 1, 1, 1, 1, 1, 1],
         [1, 0, 0, 0, 1, 2, 0, 1],
-        [1, 0, 1, 0, 1, 1, 3, 1],
-        [1, 0, 1, 0, 0, 0, 0, 1],
-        [1, 0, 1, 0, 1, 0, 0, 1],
+        [1, 5, 1, 0, 1, 1, 3, 1],
+        [1, 0, 1, 5, 0, 0, 0, 1],
+        [1, 5, 1, 0, 1, 0, 0, 1],
         [1, 0, 1, 4, 1, 0, 0, 1],
-        [1, 0, 1, 0, 0, 0, 0, 1],
+        [1, 5, 1, 0, 5, 0, 5, 1],
         [1, 1, 1, 1, 1, 1, 1, 1]
     ],
     #LEVEL2
@@ -46,21 +51,51 @@ levels = [
     ],
     #LEVEL3
     [
-        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-        [1, 0, 0, 0, 0, 1, 5, 0, 3, 1, 0, 0, 2, 0, 3, 1],
-        [1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1],
-        [1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1],
-        [1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1],
-        [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1],
-        [1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1],
-        [1, 0, 0, 4, 0, 0, 0, 0, 5, 1, 0, 0, 0, 0, 5, 1],
-        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    ] 
+        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 0, 0, 0, 1, 2, 0, 0, 3, 1],
+        [1, 0, 1, 1, 1, 1, 1, 1, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+        [1, 1, 1, 0, 1, 1, 0, 1, 0, 1],
+        [1, 0, 0, 0, 0, 1, 0, 1, 0, 1],
+        [1, 0, 1, 1, 0, 1, 1, 1, 0, 1],
+        [1, 0, 0, 4, 0, 0, 5, 0, 0, 1],
+        [1, 1, 0, 1, 1, 1, 1, 0, 1, 1],
+        [1, 0, 0, 0, 0, 0, 0, 0, 1, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+    ],
+    #LEVEL4
+    [
+        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 0, 0, 0, 1, 2, 0, 0, 3, 0, 1],
+        [1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1],
+        [1, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1],
+        [1, 0, 0, 0, 0, 1, 0, 1, 0, 4, 1],
+        [1, 0, 1, 1, 0, 1, 1, 1, 0, 0, 1],
+        [1, 0, 0, 5, 0, 0, 6, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    ],
+    #LEVEL5
+    [
+        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 0, 0, 0, 1, 2, 0, 0, 3, 0, 0, 1],
+        [1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1],
+        [1, 1, 1, 0, 1, 1, 0, 1, 0, 0, 0, 1],
+        [1, 0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 1],
+        [1, 0, 1, 1, 0, 1, 1, 1, 0, 4, 0, 1],
+        [1, 0, 0, 5, 0, 0, 6, 0, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+]
+
+
 ]
 level_descriptions = [
     "Level 1: A simple maze to get started. Collect the key and coins to reach the goal.",
     "Level 2: A more challenging layout with multiple doors and a moving enemy.",
     "Level 3: New challenging layout with multiple doors and a moving enemy."
+    "Level 4: Includes Something"
+    "Level 5: Includes Something"
 ]
 
 # GAME VARIABLE 
@@ -86,53 +121,52 @@ enemy = pygame.Rect(3 * TILE_SIZE, 6 * TILE_SIZE, TILE_SIZE, TILE_SIZE)
 enemy_dir = -1
 
 def update_screen_size(default=False):
-    global WIDTH, HEIGHT, screen
+    global WIDTH, HEIGHT, TILE_SIZE, screen
     if default:
         WIDTH, HEIGHT = DEFAULT_WIDTH, DEFAULT_HEIGHT
     else:
         WIDTH = TILE_SIZE * len(maze[0])
         HEIGHT = TILE_SIZE * len(maze)
+
+    # Ensure TILE_SIZE is adaptable if needed
+    TILE_SIZE = HEIGHT // len(maze) if HEIGHT < WIDTH else WIDTH // len(maze[0])
+
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
 
 update_screen_size()
 
 def draw():
-    screen.fill((0, 0, 0))  # SCREEN COLOUR
+    screen.fill((0, 0, 0))  # SCREEN COLOR
 
-    # MAZE TITLES
+    # Draw the maze
     for row in range(len(maze)):
         for col in range(len(maze[row])):
             x = col * TILE_SIZE
             y = row * TILE_SIZE
             tile = list(tiles.keys())[maze[row][col]]
             if tile in ['goal', 'door', 'key', 'coin']:
-            # Render tile images
+                # Render tile images, scaled to TILE_SIZE
                 image = pygame.transform.scale(tiles[tile], (TILE_SIZE, TILE_SIZE))
                 screen.blit(image, (x, y))
             else:
                 color = tiles[tile]
                 pygame.draw.rect(screen, color, (x, y, TILE_SIZE, TILE_SIZE))
 
-
-    # PLAYER & ENEMY IMAGE
+    # Player and enemy rendering
     player_image = pygame.image.load("player.png")
     enemy_image = pygame.image.load("enemy.png")
-
-    # Scale images to match TILE_SIZE
     player_image = pygame.transform.scale(player_image, (TILE_SIZE, TILE_SIZE))
     enemy_image = pygame.transform.scale(enemy_image, (TILE_SIZE, TILE_SIZE))
-
-    # PLAYER & ENEMY IMAGE APPEARING
     screen.blit(player_image, (player.x, player.y))
     screen.blit(enemy_image, (enemy.x, enemy.y))
 
-    # SCORES & LEVEL
+    # Scores and level
     score_text = font.render(f"Score: {score}", True, (255, 255, 255))
     level_text = font.render(f"Level: {current_level + 1}", True, (255, 255, 255))
     screen.blit(score_text, (10, 10))
     screen.blit(level_text, (10, 50))
 
-    pygame.display.flip()  # Update the display
+    pygame.display.flip()
 
 
 def move_player(dx, dy):
@@ -305,7 +339,7 @@ def show_levels_page():
 
         # BACKTOMENU BUTTON
         back_button_rect = pygame.Rect(50, HEIGHT - 100, 200, 50)
-        pygame.draw.rect(screen, (255, 0, 0), back_button_rect, border_radius=20)
+        pygame.draw.rect(screen, (255, 0, 0), back_button_rect, border_radius=10) #RADIUS OF THE MENU BUTTON
         back_text = font.render("Back to Menu", True, (255, 255, 255))
         back_text_x = back_button_rect.centerx - back_text.get_width() // 2
         back_text_y = back_button_rect.centery - back_text.get_height() // 2
@@ -401,6 +435,18 @@ def start_level_2():
 def start_level_3():
     global current_level
     current_level = 2
+    reset_level()
+    game_state = "play"
+
+def start_level_4():
+    global current_level
+    current_level = 3
+    reset_level()
+    game_state = "play"
+
+def start_level_5():
+    global current_level
+    current_level = 4
     reset_level()
     game_state = "play"
 
