@@ -95,8 +95,8 @@ levels = [
 level_descriptions = [
     "Level 1: A simple maze to get started. Collect the key and coins to reach the goal.",
     "Level 2: A more challenging layout with multiple doors and a moving enemy.",
-    "Level 3: New challenging layout with multiple doors and a moving enemy."
-    "Level 4: You will not be able to pass it cause of the new road"
+    "Level 3: New challenging layout with multiple doors and a moving enemy.",
+    "Level 4: You will not be able to pass it cause of the new road",
     "Level 5: Achtung, das ist die herausfordeurung!"
 ]
 
@@ -324,6 +324,39 @@ def draw_buttons(buttons):
                         action()
                         return
 
+def reference():
+    update_screen_size(default=True)
+    
+    # FONTS & SIZE OF THE TEXT
+    title_font = pygame.font.Font("Jersey10-Regular.ttf", 96)
+    subtitle_font = pygame.font.Font("Jersey10-Regular.ttf", 48)
+    subtitle1_font = pygame.font.Font("Graduate-Regular.ttf", 24)
+
+    # RENDER TEXT
+    main_title_text = title_font.render("Reference", True, (255, 255, 255))
+    subtitle_text = subtitle_font.render("subtitle 1", True, (255, 255, 255))
+    subtitle1_text = subtitle1_font.render("subtitle 2", True, (255, 255, 255))
+
+    # POSITION OF THE TEXT
+    main_title_y = 180
+    subtitle_y = 280
+    subtitle1_y = 650
+
+    # DISPLAY TEXT
+    screen.blit(main_title_text, (WIDTH // 2 - main_title_text.get_width() // 2, main_title_y))
+    screen.blit(subtitle_text, (WIDTH // 2 - subtitle_text.get_width() // 2, subtitle_y))
+    screen.blit(subtitle1_text, (WIDTH // 2 - subtitle1_text.get_width() // 2, subtitle1_y))
+
+    # BUTTONS
+    buttons = [
+        ("Main Menu", show_menu),
+        ("Levels", show_levels_page),
+    ]
+
+    # Draw buttons
+    draw_buttons(buttons)
+    pygame.display.flip()
+
 def show_levels_page():
     update_screen_size(default=True)
     level_images = []
@@ -332,7 +365,7 @@ def show_levels_page():
     for i in range(len(level_descriptions)):
         try:
             level_image = pygame.image.load(f'level{i+1}_image.png')  # AUTOUPDATE PF PHOTO
-            level_image = pygame.transform.scale(level_image, (350, 350))  # Resize image
+            level_image = pygame.transform.scale(level_image, (415, 320))  # Resize image
             level_images.append(level_image)
         except pygame.error as e:
             print(f"Error loading image for Level {i+1}: {e}")
@@ -347,6 +380,14 @@ def show_levels_page():
         back_text = font.render("Back to Menu", True, (255, 255, 255))
         back_text_x = back_button_rect.centerx - back_text.get_width() // 2
         back_text_y = back_button_rect.centery - back_text.get_height() // 2
+        screen.blit(back_text, (back_text_x, back_text_y))
+
+        #REFERENCE PAGE
+        reference_button_rect = pygame.Rect(50, HEIGHT - 180, 200, 50)
+        pygame.draw.rect(screen, (188, 137, 189), reference_button_rect, border_radius=10) #RADIUS OF THE MENU BUTTON
+        back_text = font.render("Reference", True, (255, 255, 255))
+        back_text_x = reference_button_rect.centerx - back_text.get_width() // 2
+        back_text_y = reference_button_rect.centery - back_text.get_height() // 2
         screen.blit(back_text, (back_text_x, back_text_y))
 
         # ALIGNMENTS
@@ -380,7 +421,7 @@ def show_levels_page():
                 line = ""
                 for word in words:
                     test_line = f"{line} {word}".strip()
-                    if dynamic_font.size(test_line)[0] > WIDTH - 300:  #POS Of text
+                    if dynamic_font.size(test_line)[0] > WIDTH - 300:  #POS Of text (wrap)
                         wrapped_text.append(line)
                         line = word
                     else:
@@ -409,6 +450,9 @@ def show_levels_page():
                 if back_button_rect.collidepoint(event.pos):
                     global game_state
                     game_state = "menu"
+                    return
+                if reference_button_rect.collidepoint(event.pos):
+                    game_state = "ref"
                     return
 
                 for level_button_rect, i in level_buttons:
@@ -505,6 +549,8 @@ def show_message(message, options):
 
 #GAMELOOP
 while True:
+    if game_state == "ref":
+        reference()
     if game_state == "menu":
         show_menu()
     elif game_state == "play":
