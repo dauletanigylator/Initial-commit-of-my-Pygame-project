@@ -293,15 +293,17 @@ def show_menu():
     
 def draw_buttons(buttons):
     buttons_rects = []
-    for i, (label, action) in enumerate(buttons):  # Now unpacking x and y positions
+    for i, (label, action) in enumerate(buttons):
         # BUTTONSIZES
         button_width, button_height = 200, 50
-        
-        # ROUNDBUTTON
-        button_rect = pygame.Rect(button_width, button_height)
-        pygame.draw.rect(screen, (255, 0, 0), button_rect, border_radius=10)  # RADIUS OF THE BUTTON
+        button_x = WIDTH // 2 - button_width // 2
+        button_y = HEIGHT // 2 + i * 60  # SPACING BETWEEN BUTTONS
 
-        # ALIGNMENT
+        # ROUNDBUTTON
+        button_rect = pygame.Rect(button_x, button_y, button_width, button_height)
+        pygame.draw.rect(screen, (255, 0, 0), button_rect, border_radius=10) #RADIUS OF THE BUTTON
+
+        #ALIGNMENT
         button_text = font.render(label, True, (255, 255, 255))
         text_x = button_rect.centerx - button_text.get_width() // 2
         text_y = button_rect.centery - button_text.get_height() // 2
@@ -321,7 +323,6 @@ def draw_buttons(buttons):
                     if button.collidepoint(event.pos):
                         action()
                         return
-
 
 def reference():
     update_screen_size(default=True)
@@ -353,25 +354,30 @@ def reference():
     screen.blit(subtitle1_text, (WIDTH // 2 - subtitle1_text.get_width() // 2, subtitle1_y))
     screen.blit(subtitle2_text, (WIDTH // 2 - subtitle2_text.get_width() // 2, subtitle2_y))
     screen.blit(subtitle3_text, (WIDTH // 2 - subtitle3_text.get_width() // 2, subtitle3_y))
+    '''
+    # ADJUSTABLE BUTTON POSITION VARIABLES (Each button has its own X and Y position)
+    button1_x = WIDTH // 2 - 100  # X position for button 1
+    button1_y = 600  # Y position for button 1
+
+    button2_x = WIDTH // 2 - 100  # X position for button 2
+    button2_y = 700  # Y position for button 2
+
+    button3_x = WIDTH // 2 - 100  # X position for button 3
+    button3_y = 800  # Y position for button 3
     
-    #POSITION OF THE BUTTON
-    button1_x = WIDTH // 2 - 50  # X position & etc (i + 1)
-    button1_y = 650  # Y position & etc (i + 1)
-
-    button2_x = WIDTH // 2 - 100  
-    button2_y = 650  
-
-    button3_x = WIDTH // 2 - 150  
-    button3_y = 650 
-
-    # BUTTONS 
+    # BUTTONS with adjustable positions for each button
     buttons = [
         ("Main Menu", show_menu, button1_x, button1_y),
         ("Levels", show_levels_page, button2_x, button2_y),
         ("Quit", quit_game, button3_x, button3_y)
     ]
-
-    # Draw buttons
+    '''
+    buttons = [
+        ("Main Menu", show_menu),
+        ("Levels", show_levels_page),
+        ("Quit", quit_game)
+    ]
+    # Draw buttons at the specified positions
     draw_buttons(buttons)
     pygame.display.flip()
 
