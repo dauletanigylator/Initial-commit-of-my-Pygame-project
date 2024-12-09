@@ -268,7 +268,7 @@ def show_menu():
     # RENDER TEXT
     main_title_text = title_font.render("Maze Game", True, (255, 255, 255))
     subtitle_text = subtitle_font.render("Main Menu", True, (255, 255, 255))
-    subtitle1_text = subtitle1_font.render("DEVELOPED BY GROUP 3", True, (255, 255, 255))
+    subtitle1_text = subtitle1_font.render("© DEVELOPED BY GROUP 3", True, (255, 255, 255))
 
     # POSITION OF THE TEXT
     main_title_y = 180
@@ -293,17 +293,15 @@ def show_menu():
     
 def draw_buttons(buttons):
     buttons_rects = []
-    for i, (label, action) in enumerate(buttons):
+    for i, (label, action) in enumerate(buttons):  # Now unpacking x and y positions
         # BUTTONSIZES
         button_width, button_height = 200, 50
-        button_x = WIDTH // 2 - button_width // 2
-        button_y = HEIGHT // 2 + i * 60  # SPACING BETWEEN BUTTONS
-
+        
         # ROUNDBUTTON
-        button_rect = pygame.Rect(button_x, button_y, button_width, button_height)
-        pygame.draw.rect(screen, (255, 0, 0), button_rect, border_radius=10) #RADIUS OF THE BUTTON
+        button_rect = pygame.Rect(button_width, button_height)
+        pygame.draw.rect(screen, (255, 0, 0), button_rect, border_radius=10)  # RADIUS OF THE BUTTON
 
-        #ALIGNMENT
+        # ALIGNMENT
         button_text = font.render(label, True, (255, 255, 255))
         text_x = button_rect.centerx - button_text.get_width() // 2
         text_y = button_rect.centery - button_text.get_height() // 2
@@ -324,33 +322,53 @@ def draw_buttons(buttons):
                         action()
                         return
 
+
 def reference():
     update_screen_size(default=True)
     
     # FONTS & SIZE OF THE TEXT
-    title_font = pygame.font.Font("Jersey10-Regular.ttf", 96)
-    subtitle_font = pygame.font.Font("Jersey10-Regular.ttf", 48)
-    subtitle1_font = pygame.font.Font("Graduate-Regular.ttf", 24)
+    title_font = pygame.font.Font("Jersey10-Regular.ttf", 50)
+    subtitle_font = pygame.font.Font("Jersey10-Regular.ttf", 25)
+    subtitle1_font = pygame.font.Font("Jersey10-Regular.ttf", 25)
+    subtitle2_font = pygame.font.Font("Jersey10-Regular.ttf", 25)
+    subtitle3_font = pygame.font.Font("Jersey10-Regular.ttf", 25)
 
     # RENDER TEXT
     main_title_text = title_font.render("Reference", True, (255, 255, 255))
     subtitle_text = subtitle_font.render("subtitle 1", True, (255, 255, 255))
     subtitle1_text = subtitle1_font.render("subtitle 2", True, (255, 255, 255))
+    subtitle2_text = subtitle2_font.render("subtitle 2", True, (255, 255, 255))
+    subtitle3_text = subtitle3_font.render("subtitle 2", True, (255, 255, 255))
 
     # POSITION OF THE TEXT
-    main_title_y = 180
-    subtitle_y = 280
-    subtitle1_y = 650
+    main_title_y = 55
+    subtitle_y = 183
+    subtitle1_y = 228
+    subtitle2_y = 408
+    subtitle3_y = 508
 
     # DISPLAY TEXT
     screen.blit(main_title_text, (WIDTH // 2 - main_title_text.get_width() // 2, main_title_y))
     screen.blit(subtitle_text, (WIDTH // 2 - subtitle_text.get_width() // 2, subtitle_y))
     screen.blit(subtitle1_text, (WIDTH // 2 - subtitle1_text.get_width() // 2, subtitle1_y))
+    screen.blit(subtitle2_text, (WIDTH // 2 - subtitle2_text.get_width() // 2, subtitle2_y))
+    screen.blit(subtitle3_text, (WIDTH // 2 - subtitle3_text.get_width() // 2, subtitle3_y))
+    
+    #POSITION OF THE BUTTON
+    button1_x = WIDTH // 2 - 50  # X position & etc (i + 1)
+    button1_y = 650  # Y position & etc (i + 1)
 
-    # BUTTONS
+    button2_x = WIDTH // 2 - 100  
+    button2_y = 650  
+
+    button3_x = WIDTH // 2 - 150  
+    button3_y = 650 
+
+    # BUTTONS 
     buttons = [
-        ("Main Menu", show_menu),
-        ("Levels", show_levels_page),
+        ("Main Menu", show_menu, button1_x, button1_y),
+        ("Levels", show_levels_page, button2_x, button2_y),
+        ("Quit", quit_game, button3_x, button3_y)
     ]
 
     # Draw buttons
