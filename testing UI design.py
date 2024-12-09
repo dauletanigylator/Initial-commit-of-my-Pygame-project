@@ -16,9 +16,10 @@ tiles = {
     'door': pygame.image.load("door.png"),
     'key': pygame.image.load("key.png"),
     'coin': pygame.image.load("coin.png"),
-    'power_up': (255, 0, 255)  # Magenta
+    'power_up': pygame.image.load("power_up.png")
 }
 '''
+6 - power_up
 5 - coin
 4 - KEY
 3 - door
@@ -32,7 +33,7 @@ levels = [
         [1, 0, 0, 0, 1, 2, 0, 1],
         [1, 5, 1, 0, 1, 1, 3, 1],
         [1, 0, 1, 5, 0, 0, 0, 1],
-        [1, 5, 1, 0, 1, 0, 0, 1],
+        [1, 0, 1, 0, 1, 0, 0, 1],
         [1, 0, 1, 4, 1, 0, 0, 1],
         [1, 5, 1, 0, 5, 0, 5, 1],
         [1, 1, 1, 1, 1, 1, 1, 1]
@@ -65,27 +66,28 @@ levels = [
     ],
     #LEVEL4
     [
-        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-        [1, 0, 0, 0, 1, 2, 0, 0, 3, 0, 1],
-        [1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1],
-        [1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1],
-        [1, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1],
-        [1, 0, 0, 0, 0, 1, 0, 1, 0, 4, 1],
-        [1, 0, 1, 1, 0, 1, 1, 1, 0, 0, 1],
-        [1, 0, 0, 5, 0, 0, 6, 0, 0, 0, 1],
-        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 0, 0, 0, 1, 2, 1, 3, 0, 0, 1, 1],
+        [1, 0, 1, 1, 1, 0, 0, 0, 1, 0, 0, 1],
+        [1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 5, 1],
+        [1, 1, 1, 0, 1, 1, 4, 1, 0, 0, 0, 1],
+        [1, 0, 0, 0, 5, 1, 0, 0, 0, 1, 1, 1],
+        [1, 0, 1, 1, 0, 1, 1, 1, 0, 0, 5, 1],
+        [1, 0, 0, 5, 0, 0, 6, 0, 0, 1, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 0, 5, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
     ],
     #LEVEL5
     [
-        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-        [1, 0, 0, 0, 1, 2, 0, 0, 3, 0, 0, 1],
-        [1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1],
-        [1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1],
-        [1, 1, 1, 0, 1, 1, 0, 1, 0, 0, 0, 1],
-        [1, 0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 1],
-        [1, 0, 1, 1, 0, 1, 1, 1, 0, 4, 0, 1],
-        [1, 0, 0, 5, 0, 0, 6, 0, 0, 0, 0, 1],
-        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 0, 0, 0, 0, 0, 5, 1, 0, 0, 0, 0, 0, 1],
+        [1, 1, 0, 1, 1, 1, 1, 1, 1, 5, 1, 4, 1, 1],
+        [1, 0, 0, 0, 5, 0, 0, 0, 0, 0, 1, 1, 1, 1],
+        [1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1],
+        [1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 1],
+        [1, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1],
+        [1, 1, 0, 0, 5, 0, 1, 6, 0, 3, 1, 0, 2, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 ]
 
 
@@ -94,8 +96,8 @@ level_descriptions = [
     "Level 1: A simple maze to get started. Collect the key and coins to reach the goal.",
     "Level 2: A more challenging layout with multiple doors and a moving enemy.",
     "Level 3: New challenging layout with multiple doors and a moving enemy."
-    "Level 4: Includes Something"
-    "Level 5: Includes Something"
+    "Level 4: You will not be able to pass it cause of the new road"
+    "Level 5: Achtung, das ist die herausfordeurung!"
 ]
 
 # GAME VARIABLE 
@@ -138,36 +140,39 @@ update_screen_size()
 def draw():
     screen.fill((0, 0, 0))  # SCREEN COLOR
 
-    # Draw the maze
+    # MAZE TILES
     for row in range(len(maze)):
         for col in range(len(maze[row])):
             x = col * TILE_SIZE
             y = row * TILE_SIZE
             tile = list(tiles.keys())[maze[row][col]]
-            if tile in ['goal', 'door', 'key', 'coin']:
-                # Render tile images, scaled to TILE_SIZE
+
+            if tile in ['goal', 'door', 'key', 'coin', 'power_up']:
                 image = pygame.transform.scale(tiles[tile], (TILE_SIZE, TILE_SIZE))
                 screen.blit(image, (x, y))
             else:
                 color = tiles[tile]
                 pygame.draw.rect(screen, color, (x, y, TILE_SIZE, TILE_SIZE))
 
-    # Player and enemy rendering
+    # PLAYER & ENEMY IMAGE
     player_image = pygame.image.load("player.png")
     enemy_image = pygame.image.load("enemy.png")
+
+    # Scale images to match TILE_SIZE
     player_image = pygame.transform.scale(player_image, (TILE_SIZE, TILE_SIZE))
     enemy_image = pygame.transform.scale(enemy_image, (TILE_SIZE, TILE_SIZE))
+
+    # Render player and enemy
     screen.blit(player_image, (player.x, player.y))
     screen.blit(enemy_image, (enemy.x, enemy.y))
 
-    # Scores and level
+    # SCORES & LEVEL
     score_text = font.render(f"Score: {score}", True, (255, 255, 255))
     level_text = font.render(f"Level: {current_level + 1}", True, (255, 255, 255))
     screen.blit(score_text, (10, 10))
     screen.blit(level_text, (10, 50))
 
-    pygame.display.flip()
-
+    pygame.display.flip()  # Update the display
 
 def move_player(dx, dy):
     global unlock, score, game_state
@@ -231,7 +236,6 @@ def move_enemy():
     # Check if the enemy collides with the player
     if player.colliderect(enemy):
         game_state = "game_over"
-
 
 def reset_level():
     global maze, unlock, score, player, enemy, enemy_dir, game_state
@@ -413,7 +417,7 @@ def show_levels_page():
                         current_level = i
                         reset_level()
                         return
-       
+
 def start_game():
     global game_state
     update_screen_size()
@@ -501,30 +505,6 @@ def show_message(message, options):
 
 #GAMELOOP
 while True:
-    if game_state == "menu":
-        show_menu()
-    elif game_state == "play":
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_UP or event.key == pygame.K_w:  # UP / W
-                    move_player(0, -1)
-                if event.key == pygame.K_DOWN or event.key == pygame.K_s:  # DOWN / S
-                    move_player(0, 1)
-                if event.key == pygame.K_LEFT or event.key == pygame.K_a:  # LEFT / A
-                    move_player(-1, 0)
-                if event.key == pygame.K_RIGHT or event.key == pygame.K_d:  # RIGHT / D
-                    move_player(1, 0)
-
-        move_enemy()
-        draw()
-        clock.tick(120)
-    elif game_state == "game_over":
-        show_message("You Died!", [("Restart", reset_level), ("Quit", quit_game), ("Menu", show_menu)])
-    elif game_state == "victory":
-        show_message("Level Completed!", [("Next Level", next_level), ("Main Menu", show_menu)])
     if game_state == "menu":
         show_menu()
     elif game_state == "play":
