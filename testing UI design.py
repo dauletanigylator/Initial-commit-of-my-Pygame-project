@@ -12,13 +12,15 @@ FONT_SIZE = 32
 tiles = {
     'empty': (255, 255, 255),  # White
     'wall': (0, 0, 0),         # Black
-    'goal': pygame.image.load("goal.png"),       
+    'goal': pygame.image.load("goal.png"),
     'door': pygame.image.load("door.png"),
     'key': pygame.image.load("key.png"),
     'coin': pygame.image.load("coin.png"),
-    'power_up': pygame.image.load("power_up.png")
+    'power_up': pygame.image.load("power_up.png"),
+    'won': pygame.image.load("won.png")
 }
 '''
+7 - won
 6 - power_up
 5 - coin
 4 - KEY
@@ -85,7 +87,7 @@ levels = [
         [1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1],
         [1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 1],
         [1, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1],
-        [1, 1, 0, 0, 5, 0, 1, 6, 0, 3, 1, 0, 2, 1],
+        [1, 1, 0, 0, 5, 0, 1, 6, 0, 3, 1, 0, 7, 1],
         [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 ]
 
@@ -146,7 +148,7 @@ def draw():
             y = row * TILE_SIZE
             tile = list(tiles.keys())[maze[row][col]]
 
-            if tile in ['goal', 'door', 'key', 'coin', 'power_up']:
+            if tile in ['goal', 'door', 'key', 'coin', 'power_up', 'won',]:
                 image = pygame.transform.scale(tiles[tile], (TILE_SIZE, TILE_SIZE))
                 screen.blit(image, (x, y))
             else:
@@ -161,7 +163,7 @@ def draw():
     player_image = pygame.transform.scale(player_image, (TILE_SIZE, TILE_SIZE))
     enemy_image = pygame.transform.scale(enemy_image, (TILE_SIZE, TILE_SIZE))
 
-    # Render player and enemy
+    # player and enemy
     screen.blit(player_image, (player.x, player.y))
     screen.blit(enemy_image, (enemy.x, enemy.y))
 
@@ -180,12 +182,14 @@ def move_player(dx, dy):
 
     if 0 <= new_row < len(maze) and 0 <= new_col < len(maze[0]):
         tile = list(tiles.keys())[maze[new_row][new_col]]
-        if tile in ['empty', 'goal', 'key', 'coin', 'power_up'] or (tile == 'door' and unlock > 0):
+        if tile in ['empty', 'goal', 'key', 'coin', 'power_up', 'won'] or (tile == 'door' and unlock > 0):
             player.x += dx * TILE_SIZE
             player.y += dy * TILE_SIZE
 
             if tile == 'goal':
                 game_state = "victory"
+            elif tile == 'won':
+                game_state = "won"
             elif tile == 'key':
                 unlock += 1
                 maze[new_row][new_col] = 0
@@ -640,3 +644,5 @@ while True:
         show_message("You Died!", [("Restart", reset_level), ("Quit", quit_game), ("Menu", show_menu)])
     elif game_state == "victory":
         show_message("Level Completed!", [("Next Level", next_level), ("Main Menu", show_menu)])
+    elif game_state == "won":
+        show_message("You Did It! Congrats!", [("Main Menu", show_menu), ("Quit", quit_game), ("Reference", reference), ("LVL Descrip", show_levels_page)])
