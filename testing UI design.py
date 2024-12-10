@@ -323,9 +323,64 @@ def draw_buttons(buttons):
                         action()
                         return
 
+def draw_buttons_independet(buttons):
+    buttons_rects = []
+    for label, action, (x, y) in buttons:
+        # BUTTON SIZES
+        button_width, button_height = 200, 50
+
+        # ROUND BUTTON
+        button_rect = pygame.Rect(x, y, button_width, button_height)
+        pygame.draw.rect(screen, (255, 0, 0), button_rect, border_radius=10)  # RADIUS OF THE BUTTON
+
+        # ALIGNMENT
+        button_text = font.render(label, True, (255, 255, 255))
+        text_x = button_rect.centerx - button_text.get_width() // 2
+        text_y = button_rect.centery - button_text.get_height() // 2
+        screen.blit(button_text, (text_x, text_y))
+
+        buttons_rects.append((button_rect, action))
+
+    pygame.display.flip()
+
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                for button, action in buttons_rects:
+                    if button.collidepoint(event.pos):
+                        action()
+                        return
+
+def draw_text_multiline(text, font, color, x, y, max_width):
+  
+    words = text.split(' ')
+    lines = []
+    current_line = ''
+    
+    for word in words:
+        test_line = current_line + ' ' + word if current_line else word
+        if font.size(test_line)[0] <= max_width:
+            current_line = test_line
+        else:
+            if current_line:
+                lines.append(current_line)
+            current_line = word
+    
+    if current_line:
+        lines.append(current_line)
+    
+    line_height = font.get_height()
+    for i, line in enumerate(lines):
+        rendered_text = font.render(line, True, color)
+        text_width = rendered_text.get_width()
+        screen.blit(rendered_text, (x - text_width // 2, y + i * line_height))
+
 def reference():
     update_screen_size(default=True)
-    
+
     # FONTS & SIZE OF THE TEXT
     title_font = pygame.font.Font("Jersey10-Regular.ttf", 50)
     subtitle_font = pygame.font.Font("Jersey10-Regular.ttf", 25)
@@ -335,49 +390,35 @@ def reference():
 
     # RENDER TEXT
     main_title_text = title_font.render("Reference", True, (255, 255, 255))
-    subtitle_text = subtitle_font.render("subtitle 1", True, (255, 255, 255))
-    subtitle1_text = subtitle1_font.render("subtitle 2", True, (255, 255, 255))
-    subtitle2_text = subtitle2_font.render("subtitle 2", True, (255, 255, 255))
-    subtitle3_text = subtitle3_font.render("subtitle 2", True, (255, 255, 255))
+    subtitle_text = subtitle_font.render("This game, Maze Game has been developed by Group 3.", True, (255, 255, 255))
+    subtitle1_text = "The images used within the game, specifically those featuring Tom and Jerry, are referenced for illustrative purposes. However, we do not claim ownership of these images, nor do we assert any copyright over them. These images are used under the understanding that they are publicly available for non-commercial use."
+    subtitle2_text = "The title images for the game were sourced from Google.com, with the explicit understanding that these are not under copyright restrictions."
+    subtitle3_text = "We acknowledge and respect intellectual property rights and do not intend to infringe on any copyrights by using these images."
 
     # POSITION OF THE TEXT
     main_title_y = 55
-    subtitle_y = 183
-    subtitle1_y = 228
-    subtitle2_y = 408
-    subtitle3_y = 508
+    subtitle_y = 175
+    subtitle1_y = 220
+    subtitle2_y = 400
+    subtitle3_y = 500
 
     # DISPLAY TEXT
     screen.blit(main_title_text, (WIDTH // 2 - main_title_text.get_width() // 2, main_title_y))
     screen.blit(subtitle_text, (WIDTH // 2 - subtitle_text.get_width() // 2, subtitle_y))
-    screen.blit(subtitle1_text, (WIDTH // 2 - subtitle1_text.get_width() // 2, subtitle1_y))
-    screen.blit(subtitle2_text, (WIDTH // 2 - subtitle2_text.get_width() // 2, subtitle2_y))
-    screen.blit(subtitle3_text, (WIDTH // 2 - subtitle3_text.get_width() // 2, subtitle3_y))
-    '''
-    # ADJUSTABLE BUTTON POSITION VARIABLES (Each button has its own X and Y position)
-    button1_x = WIDTH // 2 - 100  # X position for button 1
-    button1_y = 600  # Y position for button 1
-
-    button2_x = WIDTH // 2 - 100  # X position for button 2
-    button2_y = 700  # Y position for button 2
-
-    button3_x = WIDTH // 2 - 100  # X position for button 3
-    button3_y = 800  # Y position for button 3
     
-    # BUTTONS with adjustable positions for each button
+    # Draw multiline text with center alignment
+    draw_text_multiline(subtitle1_text, subtitle1_font, (255, 255, 255), WIDTH // 2, subtitle1_y, 600)
+    draw_text_multiline(subtitle2_text, subtitle2_font, (255, 255, 255), WIDTH // 2, subtitle2_y, 600)
+    draw_text_multiline(subtitle3_text, subtitle3_font, (255, 255, 255), WIDTH // 2, subtitle3_y, 600)
+    
+    # button positions
     buttons = [
-        ("Main Menu", show_menu, button1_x, button1_y),
-        ("Levels", show_levels_page, button2_x, button2_y),
-        ("Quit", quit_game, button3_x, button3_y)
+        ("Main Menu", show_menu, (WIDTH // 2 - 100, HEIGHT - 100)),
+        ("Levels", show_levels_page, (WIDTH // 2 + 150, HEIGHT - 100)),
+        ("Quit", quit_game, (WIDTH // 2 - 350, HEIGHT - 100)),
     ]
-    '''
-    buttons = [
-        ("Main Menu", show_menu),
-        ("Levels", show_levels_page),
-        ("Quit", quit_game)
-    ]
-    # Draw buttons at the specified positions
-    draw_buttons(buttons)
+    draw_buttons_independet(buttons)
+
     pygame.display.flip()
 
 def show_levels_page():
@@ -486,6 +527,7 @@ def show_levels_page():
                         return
 
 def start_game():
+    update_screen_size(default=True)
     global game_state
     update_screen_size()
     reset_level()
