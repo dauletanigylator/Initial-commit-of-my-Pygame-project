@@ -282,7 +282,7 @@ def show_menu():
     # BUTTONS
     buttons = [
         ("Start Game", start_game),
-        ("Levels", show_levels_page),
+        ("Levels & Ref", show_levels_page),
         ("Quit", quit_game)
     ]
 
@@ -448,7 +448,7 @@ def show_levels_page():
 
         #REFERENCE PAGE
         reference_button_rect = pygame.Rect(50, HEIGHT - 180, 200, 50)
-        pygame.draw.rect(screen, (188, 137, 189), reference_button_rect, border_radius=10) #RADIUS OF THE MENU BUTTON
+        pygame.draw.rect(screen, (188, 137, 189), reference_button_rect, border_radius=10) #RADIUS OF THE REF BUTTON
         back_text = font.render("Reference", True, (255, 255, 255))
         back_text_x = reference_button_rect.centerx - back_text.get_width() // 2
         back_text_y = reference_button_rect.centery - back_text.get_height() // 2
