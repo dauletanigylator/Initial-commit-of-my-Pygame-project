@@ -418,7 +418,7 @@ def reference():
     # button positions
     buttons = [
         ("Main Menu", show_menu, (WIDTH // 2 - 100, HEIGHT - 100)),
-        ("Levels", show_levels_page, (WIDTH // 2 + 150, HEIGHT - 100)),
+        ("Back to LVL", show_levels_page, (WIDTH // 2 + 150, HEIGHT - 100)),
         ("Quit", quit_game, (WIDTH // 2 - 350, HEIGHT - 100)),
     ]
     draw_buttons_independet(buttons)
@@ -645,4 +645,4 @@ while True:
     elif game_state == "victory":
         show_message("Level Completed!", [("Next Level", next_level), ("Main Menu", show_menu)])
     elif game_state == "won":
-        show_message("You Did It! Congrats!", [("Main Menu", show_menu), ("Quit", quit_game), ("Reference", reference), ("LVL Descrip", show_levels_page)])
+        show_message("You Did It! Congratulations!", [("Main Menu", show_menu), ("Quit", quit_game), ("Reference", reference), ("LVL Description", show_levels_page)])
