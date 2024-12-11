@@ -122,7 +122,7 @@ last_enemy_move_time = pygame.time.get_ticks()
 player = pygame.Rect(TILE_SIZE, TILE_SIZE, TILE_SIZE, TILE_SIZE)
 enemy = pygame.Rect(3 * TILE_SIZE, 6 * TILE_SIZE, TILE_SIZE, TILE_SIZE)
 enemy_dir = -1
-
+'''
 def update_screen_size(default=False):
     global WIDTH, HEIGHT, TILE_SIZE, screen
     if default:
@@ -135,7 +135,22 @@ def update_screen_size(default=False):
     TILE_SIZE = HEIGHT // len(maze) if HEIGHT < WIDTH else WIDTH // len(maze[0])
 
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
+'''
+def update_screen_size(width=None, height=None, default=False):
+    global WIDTH, HEIGHT, TILE_SIZE, screen
 
+    if default:
+        WIDTH, HEIGHT = DEFAULT_WIDTH, DEFAULT_HEIGHT
+    elif width and height:
+        WIDTH, HEIGHT = width, height
+    else:
+        WIDTH = TILE_SIZE * len(maze[0])
+        HEIGHT = TILE_SIZE * len(maze)
+
+    # Ensure TILE_SIZE is adaptable if needed
+    TILE_SIZE = HEIGHT // len(maze) if HEIGHT < WIDTH else WIDTH // len(maze[0])
+
+    screen = pygame.display.set_mode((WIDTH, HEIGHT))
 update_screen_size()
 
 def draw():
@@ -232,8 +247,8 @@ def move_enemy():
             0 <= new_col < len(maze[0]) and
             list(tiles.keys())[maze[new_row][new_col]] != 'wall'
         ):
-            enemy.x = new_col * TILE_SIZE
-            enemy.y = new_row * TILE_SIZE
+            enemy.x = new_col * TILE_SIZE * 1
+            enemy.y = new_row * TILE_SIZE * 1
             break
 
     # Check if the enemy collides with the player
@@ -522,14 +537,21 @@ def show_levels_page():
                 if reference_button_rect.collidepoint(event.pos):
                     game_state = "ref"
                     return
-
+                
                 for level_button_rect, i in level_buttons:
                     if level_button_rect.collidepoint(event.pos):
-                        global current_level
-                        current_level = i
-                        reset_level()
-                        return
-
+                        if i == 0:
+                            start_level_1()
+                        elif i == 1:
+                            start_level_2()
+                        elif i == 2:
+                            start_level_3()
+                        elif i == 3:
+                            start_level_4()
+                        elif i == 4:
+                            start_level_5()
+                        return  
+                
 def start_game():
     update_screen_size(default=True)
     global game_state
@@ -537,35 +559,54 @@ def start_game():
     reset_level()
     game_state = "play"
 
+# Level-specific screen sizes (width, height)
+level_sizes = [
+    (720, 689),  # Level 1 size
+    (640, 640), # Level 2 size
+    (1280, 720), # Level 3 size
+    (1920, 1080),# Level 4 size
+    (1366, 768)  # Level 5 size
+]
+
 def start_level_1():
-    global current_level
-    current_level = 0
-    reset_level()
+    global current_level, game_state
+    current_level = 1
+    update_screen_size()  # Update screen size for level 1
+    reset_level()  # Reset and prepare level-specific settings
     game_state = "play"
 
 def start_level_2():
-    global current_level
-    current_level = 1
+    global current_level, game_state
+    current_level = 2
+    update_screen_size()  # Update screen size for level 2
     reset_level()
     game_state = "play"
 
 def start_level_3():
-    global current_level
-    current_level = 2
+    global current_level, game_state
+    current_level = 3
+    update_screen_size(width=level_sizes[2][0], height=level_sizes[2][1])  # Update screen size for level 3
     reset_level()
     game_state = "play"
+    print("Starting Level 3")
 
 def start_level_4():
-    global current_level
-    current_level = 3
+    global current_level, game_state
+    current_level = 4
+    update_screen_size(width=level_sizes[3][0], height=level_sizes[3][1])  # Update screen size for level 4
     reset_level()
     game_state = "play"
+    print("Starting Level 4")
 
 def start_level_5():
-    global current_level
-    current_level = 4
+    global current_level, game_state
+    current_level = 5
+    update_screen_size(width=level_sizes[4][0], height=level_sizes[4][1])  # Update screen size for level 5
     reset_level()
     game_state = "play"
+    print("Starting Level 5")
+
+
 
 def quit_game():
     pygame.quit()
@@ -629,7 +670,7 @@ while True:
                 sys.exit()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_UP or event.key == pygame.K_w:  # UP / W
-                    move_player(0, -1)
+                  move_player(0, -1)
                 if event.key == pygame.K_DOWN or event.key == pygame.K_s:  # DOWN / S
                     move_player(0, 1)
                 if event.key == pygame.K_LEFT or event.key == pygame.K_a:  # LEFT / A
@@ -646,3 +687,7 @@ while True:
         show_message("Level Completed!", [("Next Level", next_level), ("Main Menu", show_menu)])
     elif game_state == "won":
         show_message("You Did It! Congratulations!", [("Main Menu", show_menu), ("Quit", quit_game), ("Reference", reference), ("LVL Description", show_levels_page)])
+        '''
+    elif game_state == "error":
+        show_message(("You have to complete previous level!",[("Main Menu", show_menu),  ]))
+    '''
