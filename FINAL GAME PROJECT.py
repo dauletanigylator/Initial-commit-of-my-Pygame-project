@@ -122,7 +122,7 @@ last_enemy_move_time = pygame.time.get_ticks()
 player = pygame.Rect(TILE_SIZE, TILE_SIZE, TILE_SIZE, TILE_SIZE)
 enemy = pygame.Rect(3 * TILE_SIZE, 6 * TILE_SIZE, TILE_SIZE, TILE_SIZE)
 enemy_dir = -1
-'''
+
 def update_screen_size(default=False):
     global WIDTH, HEIGHT, TILE_SIZE, screen
     if default:
@@ -147,11 +147,31 @@ def update_screen_size(width=None, height=None, default=False):
         WIDTH = TILE_SIZE * len(maze[0])
         HEIGHT = TILE_SIZE * len(maze)
 
-    # Ensure TILE_SIZE is adaptable if needed
+    
     TILE_SIZE = HEIGHT // len(maze) if HEIGHT < WIDTH else WIDTH // len(maze[0])
 
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
+    '''
 update_screen_size()
+'''
+def score():
+    if current_level == 1:
+        score_1 = scores
+    if current_level == 2:
+        score_2 = score_1 + scores
+    if current_level == 3:
+        score_3 = score_2 + scores
+    if current_level == 4:
+        score_4 = score_3 + scores
+    if current_level == 5:
+        score_5 = score_4 + scores
+    
+    screen.blit(score_1)
+    screen.blit(score_2)
+    screen.blit(score_3)
+    screen.blit(score_4)
+    screen.blit(score_5)
+'''
 
 def draw():
     screen.fill((0, 0, 0))  # SCREEN COLOR
@@ -188,7 +208,7 @@ def draw():
     screen.blit(score_text, (10, 10))
     screen.blit(level_text, (10, 50))
 
-    pygame.display.flip()  # Update the display
+    pygame.display.flip()  # updating display
 
 def move_player(dx, dy):
     global unlock, score, game_state
@@ -528,7 +548,7 @@ def show_levels_page():
                 pygame.quit()
                 sys.exit()
 
-            # BUTTONHAPTIC
+            
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if back_button_rect.collidepoint(event.pos):
                     global game_state
@@ -537,7 +557,7 @@ def show_levels_page():
                 if reference_button_rect.collidepoint(event.pos):
                     game_state = "ref"
                     return
-                
+                '''
                 for level_button_rect, i in level_buttons:
                     if level_button_rect.collidepoint(event.pos):
                         if i == 0:
@@ -551,7 +571,8 @@ def show_levels_page():
                         elif i == 4:
                             start_level_5()
                         return  
-                
+                '''
+
 def start_game():
     update_screen_size(default=True)
     global game_state
@@ -559,7 +580,7 @@ def start_game():
     reset_level()
     game_state = "play"
 
-# Level-specific screen sizes (width, height)
+'''
 level_sizes = [
     (720, 689),  # Level 1 size
     (640, 640), # Level 2 size
@@ -605,25 +626,31 @@ def start_level_5():
     reset_level()
     game_state = "play"
     print("Starting Level 5")
-
+'''
 
 
 def quit_game():
     pygame.quit()
     sys.exit()
 
-def show_message(message, options):
+def show_message(message, score_text, options):
     screen.fill((0, 0, 0))
     
     #MESSAGESSIZES
-    title_font = pygame.font.Font("Jersey10-Regular.ttf", 48)  #SIZE YOU DIED
+    title_font = pygame.font.Font("Jersey10-Regular.ttf", 48)  #SIZE OF MESSAGE
     text = title_font.render(message, True, (255, 255, 255))
     text_x = WIDTH // 2 - text.get_width() // 2
-    text_y = HEIGHT // 2 - 50
+    text_y = HEIGHT // 2 - 100
     screen.blit(text, (text_x, text_y))
     
     buttons = []
     
+    title_font = pygame.font.Font("Jersey10-Regular.ttf", 24)  #SIZE OF YOUR SCORE
+    text = title_font.render(score_text, True, (255, 255, 255))
+    text_x = WIDTH // 2 - text.get_width() // 2
+    text_y = HEIGHT // 2 - 50
+    screen.blit(text, (text_x, text_y))
+
     #BUTTONSIZES
     for i, (label, action) in enumerate(options):
         button_width, button_height = 200, 50
@@ -682,11 +709,11 @@ while True:
         draw()
         clock.tick(120) #FPS
     elif game_state == "game_over":
-        show_message("You Died!", [("Restart", reset_level), ("Quit", quit_game), ("Menu", show_menu)])
+        show_message("You Died!", f"Your score is {score}", [("Restart", reset_level), ("Quit", quit_game), ("Menu", show_menu)])
     elif game_state == "victory":
-        show_message("Level Completed!", [("Next Level", next_level), ("Main Menu", show_menu)])
+        show_message("Level Completed!", f"Your score is {score}", [("Next Level", next_level), ("Main Menu", show_menu)])
     elif game_state == "won":
-        show_message("You Did It! Congratulations!", [("Main Menu", show_menu), ("Quit", quit_game), ("Reference", reference), ("LVL Description", show_levels_page)])
+        show_message("You Did It! Congratulations!", f"Your score is {score}", [("Main Menu", show_menu), ("Quit", quit_game), ("Reference", reference), ("LVL Description", show_levels_page)])
         '''
     elif game_state == "error":
         show_message(("You have to complete previous level!",[("Main Menu", show_menu),  ]))
