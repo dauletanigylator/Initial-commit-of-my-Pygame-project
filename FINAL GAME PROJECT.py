@@ -8,10 +8,9 @@ pygame.init()
 TILE_SIZE = 80
 FONT_SIZE = 32
 
-# COLOR CHANGE TO IMAGE
 tiles = {
-    'empty': (255, 255, 255),  # White
-    'wall': (0, 0, 0),         # Black
+    'empty': (255, 255, 255),  # white road
+    'wall': (0, 0, 0),         # Black Wall
     'goal': pygame.image.load("goal.png"),
     'door': pygame.image.load("door.png"),
     'key': pygame.image.load("key.png"),
@@ -106,7 +105,7 @@ current_level = 0
 maze = levels[current_level]
 unlock = 0
 score = 0
-game_state = "menu"  # States: "menu", "play", "game_over", "victory"
+game_state = "menu" 
 WIDTH = TILE_SIZE * len(maze[0])
 HEIGHT = TILE_SIZE * len(maze)
 DEFAULT_WIDTH = TILE_SIZE * len(levels[1][0])  #DEFAULT SIZE OF THE WINDOW
@@ -123,6 +122,7 @@ player = pygame.Rect(TILE_SIZE, TILE_SIZE, TILE_SIZE, TILE_SIZE)
 enemy = pygame.Rect(3 * TILE_SIZE, 6 * TILE_SIZE, TILE_SIZE, TILE_SIZE)
 enemy_dir = -1
 
+#this function updates screen and automaticly returns to default size of the game
 def update_screen_size(default=False):
     global WIDTH, HEIGHT, TILE_SIZE, screen
     if default:
@@ -173,6 +173,7 @@ def score():
     screen.blit(score_5)
 '''
 
+#this is the main logic of the game, and images of enemy with player, titles
 def draw():
     screen.fill((0, 0, 0))  # SCREEN COLOR
 
@@ -210,6 +211,7 @@ def draw():
 
     pygame.display.flip()  # updating display
 
+#logic of the player movement
 def move_player(dx, dy):
     global unlock, score, game_state
     row, col = int(player.y // TILE_SIZE), int(player.x // TILE_SIZE)
@@ -238,6 +240,7 @@ def move_player(dx, dy):
                 unlock -= 1
                 maze[new_row][new_col] = 0
 
+#logic of tge enemy movement
 def move_enemy():
     """Move the enemy at a controlled speed."""
     global game_state, last_enemy_move_time
@@ -247,7 +250,7 @@ def move_enemy():
     if current_time - last_enemy_move_time < enemy_speed_interval:
         return
 
-    # Update the last move time
+    # Updating the last move time
     last_enemy_move_time = current_time
 
     # Choose a random direction to move
@@ -275,6 +278,7 @@ def move_enemy():
     if player.colliderect(enemy):
         game_state = "game_over"
 
+#resets the game from 0 points when losing the round or starting level again
 def reset_level():
     global maze, unlock, score, player, enemy, enemy_dir, game_state
     maze = [row[:] for row in levels[current_level]]  # Reload the level from levels
@@ -285,6 +289,7 @@ def reset_level():
     enemy_dir = -1
     game_state = "play"
 
+#definition of the next level, buttons and taptic function
 def next_level():
     global current_level, maze, game_state
     current_level += 1
@@ -295,6 +300,7 @@ def next_level():
     else:
         game_state = "menu"
 
+#main menu
 def show_menu():
     update_screen_size(default=True)
 
@@ -329,6 +335,7 @@ def show_menu():
     draw_buttons(buttons)
     pygame.display.flip()
     
+#i think it is understandable :)
 def draw_buttons(buttons):
     buttons_rects = []
     for i, (label, action) in enumerate(buttons):
@@ -362,6 +369,7 @@ def draw_buttons(buttons):
                         action()
                         return
 
+# same function of draw_buttons however made specialy for REF page to allign buttons
 def draw_buttons_independet(buttons):
     buttons_rects = []
     for label, action, (x, y) in buttons:
@@ -393,6 +401,7 @@ def draw_buttons_independet(buttons):
                         action()
                         return
 
+# same to previous, allignes text in REF page
 def draw_text_multiline(text, font, color, x, y, max_width):
   
     words = text.split(' ')
@@ -417,6 +426,7 @@ def draw_text_multiline(text, font, color, x, y, max_width):
         text_width = rendered_text.get_width()
         screen.blit(rendered_text, (x - text_width // 2, y + i * line_height))
 
+#REF page
 def reference():
     update_screen_size(default=True)
 
@@ -460,6 +470,7 @@ def reference():
 
     pygame.display.flip()
 
+#LEVELS PAGE with Description
 def show_levels_page():
     update_screen_size(default=True)
     level_images = []
@@ -573,6 +584,7 @@ def show_levels_page():
                         return  
                 '''
 
+#logic & statement of starting the game of level
 def start_game():
     update_screen_size(default=True)
     global game_state
@@ -581,13 +593,13 @@ def start_game():
     game_state = "play"
 
 '''
+NON SENSE!
 level_sizes = [
     (720, 689),  # Level 1 size
     (640, 640), # Level 2 size
     (1280, 720), # Level 3 size
     (1920, 1080),# Level 4 size
     (1366, 768)  # Level 5 size
-]
 
 def start_level_1():
     global current_level, game_state
@@ -628,11 +640,12 @@ def start_level_5():
     print("Starting Level 5")
 '''
 
-
+# alles klar!
 def quit_game():
     pygame.quit()
     sys.exit()
 
+#displays states like you won and buttons
 def show_message(message, score_text, options):
     screen.fill((0, 0, 0))
     
@@ -645,7 +658,7 @@ def show_message(message, score_text, options):
     
     buttons = []
     
-    title_font = pygame.font.Font("Jersey10-Regular.ttf", 24)  #SIZE OF YOUR SCORE
+    title_font = pygame.font.Font("Jersey10-Regular.ttf", 30)  #SIZE OF YOUR SCORE
     text = title_font.render(score_text, True, (255, 255, 255))
     text_x = WIDTH // 2 - text.get_width() // 2
     text_y = HEIGHT // 2 - 50
@@ -655,7 +668,7 @@ def show_message(message, score_text, options):
     for i, (label, action) in enumerate(options):
         button_width, button_height = 200, 50
         button_x = WIDTH // 2 - button_width // 2
-        button_y = HEIGHT // 2 + 60 + i * 60 
+        button_y = HEIGHT // 2 + 10 + i * 60 
 
         # ROUNDBUTTON
         button_rect = pygame.Rect(button_x, button_y, button_width, button_height)
@@ -677,7 +690,7 @@ def show_message(message, score_text, options):
                 pygame.quit()
                 sys.exit()
 
-            # BUTTON CLICKS THEN DO THIS
+            # CLICKABLE BUTTON
             if event.type == pygame.MOUSEBUTTONDOWN:
                 for button_rect, action in buttons:
                     if button_rect.collidepoint(event.pos):
@@ -713,8 +726,9 @@ while True:
     elif game_state == "victory":
         show_message("Level Completed!", f"Your score is {score}", [("Next Level", next_level), ("Main Menu", show_menu)])
     elif game_state == "won":
-        show_message("You Did It! Congratulations!", f"Your score is {score}", [("Main Menu", show_menu), ("Quit", quit_game), ("Reference", reference), ("LVL Description", show_levels_page)])
+        show_message("You Did It! Congratulations!", f"Your score is: {score}", [("Main Menu", show_menu), ("Quit", quit_game), ("Reference", reference), ("LVL Description", show_levels_page)])
         '''
+        FOR LVL PAGE
     elif game_state == "error":
         show_message(("You have to complete previous level!",[("Main Menu", show_menu),  ]))
     '''
